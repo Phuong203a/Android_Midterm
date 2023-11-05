@@ -1,0 +1,49 @@
+package com.example.studentinformationmanagement.util;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+
+public class Const {
+    public static class COLLECTION{
+        public static String USER = "user";
+    }
+    public static class DOCUMENT{
+        public static String USER = "user";
+    }
+    public static class FIELD{
+        public static String USER = "user";
+        public static String EMAIL = "email";
+        public static String ROLE = "role";
+        public static String USER_NAME = "user_name";
+        public static String PHONE_NUMBER = "phone_number";
+        public static String DOB = "dob";
+        public static String AVATAR = "avatar";
+        public static String STATUS = "status";
+        public static String IS_DELETE = "is_delete";
+
+
+    }
+    public static class ROLE{
+        public static String ADMIN = "ADMIN";
+        public static String MANAGER = "MANAGER";
+        public static String EMPLOYEE = "EMPLOYEE";
+
+    }
+    public static class STATUS{
+        public static String NORMAL = "NORMAL";
+        public static String LOCKED = "LOCKED";
+
+    }
+    public static FirebaseFirestore DATABASE_REFERENCE ;
+    public static FirebaseAuth FIREBASE_AUTH;
+
+    //    public static  StorageReference STORAGE_REFERENCE ;
+    public static DocumentReference DOCUMENT_REFERENCE;
+    static {
+        DATABASE_REFERENCE = FirebaseFirestore.getInstance();
+        FIREBASE_AUTH = FirebaseAuth.getInstance();
+//        STORAGE_REFERENCE =  FirebaseStorage.getInstance().getReference();
+    }
+
+}

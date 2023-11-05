@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "283806745924",
+    "project_id": "student-information-mana-adba6",
+    "storage_bucket": "student-information-mana-adba6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:283806745924:android:7e2b613766bec099ab0311",
+        "android_client_info": {
+          "package_name": "com.example.studentinformationmanagement"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBBMa4RfG9PP-GiGiABMqHiAIw0rVUFPkE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
