@@ -40,9 +40,9 @@ public class EditProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
 
-        editTextName = findViewById(R.id.editTxtUserNameProfile);
+        editTextName = findViewById(R.id.editTxtUserNameEdit);
         editTextDob = findViewById(R.id.editTxtDobProfile);
-        editTextPhone = findViewById(R.id.editTxtPhoneNumberProfile);
+        editTextPhone = findViewById(R.id.editTxtPhoneEdit);
         radioGroup = findViewById(R.id.radioGroupEdit);
         radioButtonNormal = findViewById(R.id.radioButtonNormal);
         radioButtonLocked = findViewById(R.id.radioButtonLocked);
@@ -73,7 +73,7 @@ public class EditProfileActivity extends AppCompatActivity {
 
         btnSave.setOnClickListener(v -> saveProfile(currentUser));
 
-        editTextDob.setOnClickListener(v -> setDate());
+        editTextDob.setOnClickListener(v -> DataUtil.setDate(this,datePickerListener));
         datePickerListener = (view, year, month, dayOfMonth) -> {
             month += 1;
             String date = dayOfMonth + "/" + month + "/" + year;
@@ -87,20 +87,7 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
-    private void setDate() {
-        Calendar cal = Calendar.getInstance();
-        int year = cal.get(Calendar.YEAR);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DATE);
 
-        DatePickerDialog dialog = new DatePickerDialog(
-                EditProfileActivity.this,
-                R.style.Theme_StudentInformationManagement,
-                datePickerListener,
-                year, month, day);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        dialog.show();
-    }
 
     private void saveProfile(User currentUser) {
         currentUser.setUserName(editTextName.getText().toString());

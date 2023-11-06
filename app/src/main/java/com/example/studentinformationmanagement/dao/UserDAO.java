@@ -67,8 +67,8 @@ public class UserDAO {
         List<User> allUser = new ArrayList<>();
         try {
             Task<QuerySnapshot> firebaseTask = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.USER)
-                    .whereEqualTo(Const.FIELD.IS_DELETE, true)
-                    .get()
+                    .whereEqualTo(Const.FIELD.IS_DELETE, false)
+                     .get()
                     .addOnCompleteListener(task -> {});
 
             FutureTask<Object> futureTask = new FutureTask<>(() -> {
@@ -121,4 +121,13 @@ public class UserDAO {
                 });
     }
 
+    public void createUser(User user) {
+        DocumentReference docRef = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.USER).document(user.getEmail());
+        docRef.set(user).addOnSuccessListener(aVoid -> {
+                    Log.d("createUser", "DocumentSnapshot successfully create!");
+                })
+                .addOnFailureListener(e -> {
+                    Log.d("createUser", "Error updating document", e);
+                });
+    }
 }

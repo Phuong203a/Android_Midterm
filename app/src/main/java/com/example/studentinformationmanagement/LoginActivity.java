@@ -108,13 +108,5 @@ public class LoginActivity extends AppCompatActivity {
         return true;
     }
 
-    private void mAuthSignUp(String email, String password) {
-        try {
-            firebaseAuth = FirebaseAuth.getInstance();
-            firebaseAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(task -> Toast.makeText(LoginActivity.this, "Auth Ok", Toast.LENGTH_SHORT).show()).addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "Auth failed", Toast.LENGTH_SHORT).show());
-        } catch (Exception ex) {
-            Log.d("Error mAuthSignUp LoginActivity", ex.getMessage());
-        }
 
-    }
 }

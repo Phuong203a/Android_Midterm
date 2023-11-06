@@ -15,12 +15,12 @@ public class Const {
         public static String USER = "user";
         public static String EMAIL = "email";
         public static String ROLE = "role";
-        public static String USER_NAME = "user_name";
-        public static String PHONE_NUMBER = "phone_number";
+        public static String USER_NAME = "userName";
+        public static String PHONE_NUMBER = "phoneNumber";
         public static String DOB = "dob";
         public static String AVATAR = "avatar";
         public static String STATUS = "status";
-        public static String IS_DELETE = "is_delete";
+        public static String IS_DELETE = "delete";
 
 
     }
@@ -44,6 +44,12 @@ public class Const {
         DATABASE_REFERENCE = FirebaseFirestore.getInstance();
         FIREBASE_AUTH = FirebaseAuth.getInstance();
 //        STORAGE_REFERENCE =  FirebaseStorage.getInstance().getReference();
+    }
+    public static class FIREBASE{
+        public static String URL = "NORMAL";
+        public static String API_KEY = "AIzaSyBBMa4RfG9PP-GiGiABMqHiAIw0rVUFPkE";
+        public static String PROJECT_ID = "student-information-mana-adba6";
+
     }
 
 }

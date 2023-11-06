@@ -43,7 +43,7 @@ public class ProfileActivity extends AppCompatActivity {
             txtAge = findViewById(R.id.txtAgeProfile);
             txtPhoneNumber = findViewById(R.id.txtPhoneNumberProfile);
             txtRole = findViewById(R.id.txtRoleProfile);
-            circleImageView = (ImageView) findViewById(R.id.imageAvatarProfile);
+            circleImageView =  findViewById(R.id.imageAvatarProfile);
             imgBackProfile = findViewById(R.id.imgBackProfile);
             btnEditProfile = findViewById(R.id.btnEditProfile);
 

@@ -1,14 +1,21 @@
 package com.example.studentinformationmanagement.util;
 
+import android.app.DatePickerDialog;
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.widget.ImageView;
 
+import com.example.studentinformationmanagement.EditProfileActivity;
+import com.example.studentinformationmanagement.R;
 import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DataUtil {
@@ -46,7 +53,20 @@ public class DataUtil {
             imageView.setImageResource(defaultId);
         }
     }
+    public static void setDate(Context context, DatePickerDialog.OnDateSetListener datePickerListener) {
+        Calendar cal = Calendar.getInstance();
+        int year = cal.get(Calendar.YEAR);
+        int month = cal.get(Calendar.MONTH);
+        int day = cal.get(Calendar.DATE);
 
+        DatePickerDialog dialog = new DatePickerDialog(
+                context,
+                R.style.Theme_StudentInformationManagement,
+                datePickerListener,
+                year, month, day);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+    }
 //    public static Date convertToDate(String date) {
 //        try {
 //            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATE_FORMAT);
