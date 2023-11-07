@@ -26,7 +26,6 @@ public class ProfileActivity extends AppCompatActivity {
     TextView txtRole;
     ImageView circleImageView;
     ImageView imgBackProfile;
-
     Button btnEditProfile;
 
     @Override

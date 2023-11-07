@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class UserDAO {
     public User getCurrentUser(String email) {
         try {
-            if (email == null || email == "") {
+            if (email == null || email.equals("")) {
                 email = Const.FIREBASE_AUTH.getCurrentUser().getEmail();
             }
 

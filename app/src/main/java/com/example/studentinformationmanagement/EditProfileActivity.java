@@ -50,13 +50,18 @@ public class EditProfileActivity extends AppCompatActivity {
         imageViewAvatar = findViewById(R.id.imgAvatarEdit);
         imgBackEdit = findViewById(R.id.imgBackEdit);
 
+        Bundle extras = getIntent().getExtras();
+        String email = "";
+        if (extras != null) {
+            email = extras.getString(Const.FIELD.EMAIL);
+        }
         UserDAO userDAO = new UserDAO();
-        User currentUser = userDAO.getCurrentUser(null);
+        User currentUser = userDAO.getCurrentUser(email);
 
         editTextName.setText(currentUser.getUserName());
         editTextDob.setText(currentUser.getDob());
         editTextPhone.setText(currentUser.getPhoneNumber());
-        DataUtil.setAvatar(currentUser.getAvatar(),imageViewAvatar,R.drawable.default_avatar);
+        DataUtil.setAvatar(currentUser.getAvatar(), imageViewAvatar, R.drawable.default_avatar);
 
 
         String status = currentUser.getStatus();
@@ -73,20 +78,15 @@ public class EditProfileActivity extends AppCompatActivity {
 
         btnSave.setOnClickListener(v -> saveProfile(currentUser));
 
-        editTextDob.setOnClickListener(v -> DataUtil.setDate(this,datePickerListener));
+        editTextDob.setOnClickListener(v -> DataUtil.setDate(this, datePickerListener));
         datePickerListener = (view, year, month, dayOfMonth) -> {
             month += 1;
             String date = dayOfMonth + "/" + month + "/" + year;
             editTextDob.setText(date);
         };
 
-        imgBackEdit.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ProfileActivity.class);
-            startActivity(intent);
-            finish();
-        });
+        imgBackEdit.setOnClickListener(v -> finish());
     }
-
 
 
     private void saveProfile(User currentUser) {

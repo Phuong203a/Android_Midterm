@@ -7,6 +7,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 public class Const {
     public static class COLLECTION{
         public static String USER = "user";
+        public static String LOGIN_HISTORY = "login_history";
+
     }
     public static class DOCUMENT{
         public static String USER = "user";

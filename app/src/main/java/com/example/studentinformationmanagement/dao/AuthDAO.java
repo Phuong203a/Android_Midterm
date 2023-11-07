@@ -14,8 +14,6 @@ public class AuthDAO {
 
     public void mAuthSignUp(String email, String password, Context context) {
         try {
-
-
             FirebaseOptions firebaseOptions = new FirebaseOptions.Builder()
                     .setApiKey(Const.FIREBASE.API_KEY)
                     .setApplicationId(Const.FIREBASE.PROJECT_ID).build();

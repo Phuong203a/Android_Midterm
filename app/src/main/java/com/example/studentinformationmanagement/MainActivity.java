@@ -31,7 +31,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private FirebaseUser currentUser;
-    private Menu myMenu;
 
     @Override
     protected void onStart() {
@@ -133,12 +132,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void moveToAccountManager() {
         Intent intent = new Intent(this, UserAccountActivity.class);
         startActivity(intent);
-        finish();
     }
     private void moveToProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
-//        finish();
     }
 
     @Override
