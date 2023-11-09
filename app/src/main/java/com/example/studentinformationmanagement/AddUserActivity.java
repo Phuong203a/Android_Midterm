@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Patterns;
 import android.widget.ArrayAdapter;
@@ -14,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.studentinformationmanagement.dao.AuthDAO;
+import com.example.studentinformationmanagement.dao.ImageDao;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.User;
 import com.example.studentinformationmanagement.util.Const;
@@ -25,6 +27,7 @@ public class AddUserActivity extends AppCompatActivity {
     ImageView imageViewAvatar;
     ImageView imgBack;
     Spinner spinner;
+    Uri imageUri;
     DatePickerDialog.OnDateSetListener datePickerListener;
 
 
@@ -64,6 +67,7 @@ public class AddUserActivity extends AppCompatActivity {
             editTextDob.setText(date);
         };
         imgBack.setOnClickListener(v -> backToListUser());
+        imageViewAvatar.setOnClickListener(v -> selectImage());
     }
 
     private void createNewUser(UserDAO userDAO) {
@@ -85,10 +89,14 @@ public class AddUserActivity extends AppCompatActivity {
             newUser.setDob(dob);
             newUser.setPhoneNumber(phoneNumber);
             newUser.setEmail(email);
-            newUser.setAvatar("");
             newUser.setRole(spinner.getSelectedItem().toString());
             newUser.setStatus(Const.STATUS.NORMAL);
             newUser.setDelete(false);
+
+            if(imageUri!= null){
+                ImageDao imageDao = new ImageDao();
+                newUser.setAvatar(imageDao.uploadImage(imageUri));
+            }
 
             userDAO.createUser(newUser);
             Toast.makeText(this, "Tạo tài khoản thành công", Toast.LENGTH_SHORT).show();
@@ -98,7 +106,21 @@ public class AddUserActivity extends AppCompatActivity {
         }
 
     }
+    private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Const.REQUEST_CODE.IMAGE);
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE.IMAGE) {
+            imageUri = data.getData();
+            imageViewAvatar.setImageURI(imageUri);
+        }
+    }
 
     private void backToListUser(){
         Intent intent = new Intent(this,UserAccountActivity.class);

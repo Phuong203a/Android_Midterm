@@ -1,24 +1,42 @@
 package com.example.studentinformationmanagement;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.example.studentinformationmanagement.dao.ImageDao;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.User;
 import com.example.studentinformationmanagement.util.Const;
 import com.example.studentinformationmanagement.util.DataUtil;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
+import java.net.URI;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.FutureTask;
 
 public class EditProfileActivity extends AppCompatActivity {
 
@@ -32,6 +50,8 @@ public class EditProfileActivity extends AppCompatActivity {
     ImageView imageViewAvatar;
     ImageView imgBackEdit;
 
+    Uri imageUri;
+    Bitmap bitmap;
     DatePickerDialog.OnDateSetListener datePickerListener;
 
 
@@ -86,6 +106,7 @@ public class EditProfileActivity extends AppCompatActivity {
         };
 
         imgBackEdit.setOnClickListener(v -> finish());
+        imageViewAvatar.setOnClickListener(v -> selectImage());
     }
 
 
@@ -93,6 +114,10 @@ public class EditProfileActivity extends AppCompatActivity {
         currentUser.setUserName(editTextName.getText().toString());
         currentUser.setDob(editTextDob.getText().toString());
         currentUser.setPhoneNumber(editTextPhone.getText().toString());
+        if(imageUri != null){
+            ImageDao imageDao = new ImageDao();
+            currentUser.setAvatar(imageDao.uploadImage(imageUri));
+        }
         String status = Const.STATUS.NORMAL;
 
         int radioId = radioGroup.getCheckedRadioButtonId();
@@ -109,4 +134,22 @@ public class EditProfileActivity extends AppCompatActivity {
         startActivity(intent);
         finish();
     }
+
+    private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Const.REQUEST_CODE.IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE.IMAGE) {
+            imageUri = data.getData();
+            imageViewAvatar.setImageURI(imageUri);
+        }
+    }
+
+
 }

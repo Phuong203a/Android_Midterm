@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.example.studentinformationmanagement.dao.ImageDao;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.User;
 import com.example.studentinformationmanagement.util.Const;
@@ -34,6 +36,7 @@ public class EditUserActivity extends AppCompatActivity {
     DatePickerDialog.OnDateSetListener datePickerListener;
     RadioGroup radioGroup;
     RadioButton radioButtonNormal,radioButtonLocked;
+    Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,14 +87,6 @@ public class EditUserActivity extends AppCompatActivity {
             String date = dayOfMonth + "/" + month + "/" + year;
             editTextDob.setText(date);
         };
-        imgBack.setOnClickListener(v -> backToListUser());
-        btnEdit.setOnClickListener(v -> editUser(userDAO));
-
-        btnDelete.setOnClickListener(v -> {
-//            changePassword();
-            deleteUser(editUser,userDAO);
-        });
-
         String status = editUser.getStatus();
 
         if (status.equals(Const.STATUS.NORMAL)) {
@@ -104,6 +99,10 @@ public class EditUserActivity extends AppCompatActivity {
 
         }
 
+        imgBack.setOnClickListener(v -> backToListUser());
+        btnEdit.setOnClickListener(v -> editUser(userDAO));
+        imageViewAvatar.setOnClickListener(v -> selectImage());
+        btnDelete.setOnClickListener(v -> deleteUser(editUser,userDAO));
 
     }
 
@@ -115,7 +114,10 @@ public class EditUserActivity extends AppCompatActivity {
         newUser.setDob(editTextDob.getText().toString());
         newUser.setPhoneNumber(editTextPhone.getText().toString());
         newUser.setRole(spinner.getSelectedItem().toString());
-        newUser.setAvatar("");
+        if(imageUri != null){
+            ImageDao imageDao = new ImageDao();
+            newUser.setAvatar(imageDao.uploadImage(imageUri));
+        }
         String status = Const.STATUS.NORMAL;
         int radioId = radioGroup.getCheckedRadioButtonId();
         if (radioId == R.id.radioButtonNormalEditUser) {
@@ -152,5 +154,20 @@ public class EditUserActivity extends AppCompatActivity {
         userDAO.updateUser(user);
         Toast.makeText(this, "Xoá account thành công", Toast.LENGTH_SHORT).show();
         backToListUser();
+    }
+    private void selectImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), Const.REQUEST_CODE.IMAGE);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Const.REQUEST_CODE.IMAGE) {
+            imageUri = data.getData();
+            imageViewAvatar.setImageURI(imageUri);
+        }
     }
 }

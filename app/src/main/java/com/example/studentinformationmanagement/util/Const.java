@@ -3,6 +3,8 @@ package com.example.studentinformationmanagement.util;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class Const {
     public static class COLLECTION{
@@ -26,7 +28,13 @@ public class Const {
 
 
     }
-    public static class ROLE{
+    public static class REQUEST_CODE{
+        public static int IMAGE = 100;
+
+    }
+
+
+        public static class ROLE{
         public static String ADMIN = "ADMIN";
         public static String MANAGER = "MANAGER";
         public static String EMPLOYEE = "EMPLOYEE";
@@ -40,15 +48,14 @@ public class Const {
     public static FirebaseFirestore DATABASE_REFERENCE ;
     public static FirebaseAuth FIREBASE_AUTH;
 
-    //    public static  StorageReference STORAGE_REFERENCE ;
-    public static DocumentReference DOCUMENT_REFERENCE;
+    public static StorageReference STORAGE_REFERENCE ;
+
     static {
         DATABASE_REFERENCE = FirebaseFirestore.getInstance();
         FIREBASE_AUTH = FirebaseAuth.getInstance();
-//        STORAGE_REFERENCE =  FirebaseStorage.getInstance().getReference();
+        STORAGE_REFERENCE =  FirebaseStorage.getInstance().getReference();
     }
     public static class FIREBASE{
-        public static String URL = "NORMAL";
         public static String API_KEY = "AIzaSyBBMa4RfG9PP-GiGiABMqHiAIw0rVUFPkE";
         public static String PROJECT_ID = "student-information-mana-adba6";
 
