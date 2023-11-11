@@ -15,6 +15,9 @@
         android:theme="@style/Theme.StudentInformationManagement"
         tools:targetApi="31">
         <activity
+            android:name=".LoginHistoryActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditUserActivity"
             android:exported="false" />
         <activity

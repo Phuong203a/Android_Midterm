@@ -25,7 +25,8 @@ public class Const {
         public static String AVATAR = "avatar";
         public static String STATUS = "status";
         public static String IS_DELETE = "delete";
-
+        public static String LOGIN_TIME = "loginTime";
+        public static String DEVICE_NAME = "deviceName";
 
     }
     public static class REQUEST_CODE{

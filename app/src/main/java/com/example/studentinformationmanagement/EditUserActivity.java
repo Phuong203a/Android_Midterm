@@ -15,9 +15,11 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.studentinformationmanagement.dao.ImageDao;
+import com.example.studentinformationmanagement.dao.LoginHistoryDAO;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.User;
 import com.example.studentinformationmanagement.util.Const;
@@ -29,14 +31,15 @@ import com.google.firebase.auth.FirebaseUser;
 
 public class EditUserActivity extends AppCompatActivity {
     EditText editTextName, editTextDob, editTextPhone, editTextEmail;
-    Button btnEdit,btnDelete;
+    Button btnEdit, btnDelete;
     ImageView imageViewAvatar;
     ImageView imgBack;
     Spinner spinner;
     DatePickerDialog.OnDateSetListener datePickerListener;
     RadioGroup radioGroup;
-    RadioButton radioButtonNormal,radioButtonLocked;
+    RadioButton radioButtonNormal, radioButtonLocked;
     Uri imageUri;
+    TextView txtLoginHistory;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,13 +50,14 @@ public class EditUserActivity extends AppCompatActivity {
         editTextEmail = findViewById(R.id.editTxtEmailEditUser);
         editTextPhone = findViewById(R.id.editTxtPhoneNumberEditUser);
         btnEdit = findViewById(R.id.btnEditUser);
-        btnDelete= findViewById(R.id.btnDeleteUser);
+        btnDelete = findViewById(R.id.btnDeleteUser);
         imageViewAvatar = findViewById(R.id.imgAvatarEditUser);
         imgBack = findViewById(R.id.imgBackEditUser);
         spinner = findViewById(R.id.spinnerEditUser);
         radioGroup = findViewById(R.id.radioGroupEditUser);
         radioButtonNormal = findViewById(R.id.radioButtonNormalEditUser);
         radioButtonLocked = findViewById(R.id.radioButtonLockedEditUser);
+        txtLoginHistory = findViewById(R.id.txtLoginHistory);
 
         String[] arraySpinner = new String[]{
                 Const.ROLE.ADMIN, Const.ROLE.EMPLOYEE, Const.ROLE.MANAGER
@@ -66,10 +70,8 @@ public class EditUserActivity extends AppCompatActivity {
 
 
         Bundle extras = getIntent().getExtras();
-        String email = "";
-        if (extras != null) {
-            email = extras.getString(Const.FIELD.EMAIL);
-        }
+        String email = extras != null ? extras.getString(Const.FIELD.EMAIL): "";
+
 
         UserDAO userDAO = new UserDAO();
         User editUser = userDAO.getCurrentUser(email);
@@ -78,10 +80,10 @@ public class EditUserActivity extends AppCompatActivity {
         editTextEmail.setText(editUser.getEmail());
         editTextDob.setText(editUser.getDob());
         editTextPhone.setText(editUser.getPhoneNumber());
-        spinner.setSelection(findIndexSpinner(arraySpinner,editUser.getRole()));
+        spinner.setSelection(findIndexSpinner(arraySpinner, editUser.getRole()));
         DataUtil.setAvatar(editUser.getAvatar(), imageViewAvatar, R.drawable.default_avatar);
 
-        editTextDob.setOnClickListener(v -> DataUtil.setDate(this,datePickerListener));
+        editTextDob.setOnClickListener(v -> DataUtil.setDate(this, datePickerListener));
         datePickerListener = (view, year, month, dayOfMonth) -> {
             month += 1;
             String date = dayOfMonth + "/" + month + "/" + year;
@@ -102,11 +104,18 @@ public class EditUserActivity extends AppCompatActivity {
         imgBack.setOnClickListener(v -> backToListUser());
         btnEdit.setOnClickListener(v -> editUser(userDAO));
         imageViewAvatar.setOnClickListener(v -> selectImage());
-        btnDelete.setOnClickListener(v -> deleteUser(editUser,userDAO));
+        btnDelete.setOnClickListener(v -> deleteUser(editUser, userDAO));
+        txtLoginHistory.setOnClickListener(v ->viewLoginHistory(email));
 
     }
 
-    private void editUser(UserDAO userDAO){
+    private void viewLoginHistory(String email) {
+        Intent intent = new Intent(this, LoginHistoryActivity.class);
+        intent.putExtra(Const.FIELD.EMAIL,email);
+        startActivity(intent);
+    }
+
+    private void editUser(UserDAO userDAO) {
 
         User newUser = new User();
         newUser.setEmail(editTextEmail.getText().toString());
@@ -114,7 +123,7 @@ public class EditUserActivity extends AppCompatActivity {
         newUser.setDob(editTextDob.getText().toString());
         newUser.setPhoneNumber(editTextPhone.getText().toString());
         newUser.setRole(spinner.getSelectedItem().toString());
-        if(imageUri != null){
+        if (imageUri != null) {
             ImageDao imageDao = new ImageDao();
             newUser.setAvatar(imageDao.uploadImage(imageUri));
         }
@@ -131,22 +140,25 @@ public class EditUserActivity extends AppCompatActivity {
         Toast.makeText(this, "Update account thành công", Toast.LENGTH_SHORT).show();
         backToListUser();
     }
-    private int findIndexSpinner(String[] arraySpinner,String role){
-        for(int i = 0 ; i < arraySpinner.length;i++){
-            if(arraySpinner[i].equals(role))
+
+    private int findIndexSpinner(String[] arraySpinner, String role) {
+        for (int i = 0; i < arraySpinner.length; i++) {
+            if (arraySpinner[i].equals(role))
                 return i;
         }
         return 0;
     }
-    private void backToListUser(){
-        Intent intent = new Intent(this,UserAccountActivity.class);
+
+    private void backToListUser() {
+        Intent intent = new Intent(this, UserAccountActivity.class);
         startActivity(intent);
         finish();
     }
-    private void deleteUser(User user,UserDAO userDAO){
-        FirebaseAuth mAuth  = FirebaseAuth.getInstance();
+
+    private void deleteUser(User user, UserDAO userDAO) {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(user.getEmail().equals(currentUser)){
+        if (user.getEmail().equals(currentUser)) {
             Toast.makeText(this, "Không thể tự xoá account chính chủ", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -155,6 +167,7 @@ public class EditUserActivity extends AppCompatActivity {
         Toast.makeText(this, "Xoá account thành công", Toast.LENGTH_SHORT).show();
         backToListUser();
     }
+
     private void selectImage() {
         Intent intent = new Intent();
         intent.setType("image/*");

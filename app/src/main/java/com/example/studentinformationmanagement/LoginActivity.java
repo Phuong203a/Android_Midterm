@@ -51,60 +51,65 @@ public class LoginActivity extends AppCompatActivity {
         txtEmail = findViewById(R.id.txtEmail);
         txtPassword = findViewById(R.id.txtPassword);
 
-        btnLogin.setOnClickListener(loginAction());
+        btnLogin.setOnClickListener(v -> loginAction());
     }
 
-    private View.OnClickListener loginAction() {
-        return v -> {
-            try {
-                String email = txtEmail.getText().toString().trim();
-                String password = txtPassword.getText().toString().trim();
-                mAuthSignIn(email, password);
-            } catch (Exception ex) {
-                Log.d("Error loginAction LoginActivity", ex.getMessage());
-            }
-        };
+    private void loginAction() {
+        try {
+            String email = txtEmail.getText().toString().trim();
+            String password = txtPassword.getText().toString().trim();
+            mAuthSignIn(email, password);
+        } catch (Exception ex) {
+            Log.d("Error loginAction LoginActivity", ex.getMessage());
+        }
 
     }
 
     private void mAuthSignIn(String email, String password) {
-        LoadingAlert loadingAlert = new LoadingAlert(LoginActivity.this);
+        try {
 
-        if (email.isEmpty()) {
-            Toast.makeText(LoginActivity.this, "Email không được bỏ trống", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            Toast.makeText(LoginActivity.this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
-            return;
-        } else if (password.isEmpty()) {
-            Toast.makeText(LoginActivity.this, "Password không được bỏ trống", Toast.LENGTH_SHORT).show();
-            return;
+            if (email.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Email không được bỏ trống", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                Toast.makeText(LoginActivity.this, "Email không đúng định dạng", Toast.LENGTH_SHORT).show();
+                return;
+            } else if (password.isEmpty()) {
+                Toast.makeText(LoginActivity.this, "Password không được bỏ trống", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            firebaseAuth = FirebaseAuth.getInstance();
+            firebaseAuth.signInWithEmailAndPassword(email, password).addOnSuccessListener(task -> {
+                                boolean isSuccess = checkIfUserAvailable(email);
+                                if (isSuccess) {
+                                    createLoginHistory(email);
+                                    Intent intent = new Intent(this, MainActivity.class);
+                                    startActivity(intent);
+                                    finish();
+                                }
+                            }
+                    )
+                    .addOnFailureListener(e -> {
+                                Log.d("addOnFailureListener, signin", e.getMessage());
+                                Toast.makeText(LoginActivity.this, "User name or password is incorrect", Toast.LENGTH_SHORT).show();
+                            }
+                    );
+
+        } catch (Exception ex) {
+            Log.d("Exception, signin", ex.getMessage());
+
         }
 
-        loadingAlert.setLoadingDialog();
-
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
-                            boolean isSuccess = checkIfUserAvailable(email);
-                            if (isSuccess) {
-                                createLoginHistory(email);
-                                Intent intent = new Intent(this, MainActivity.class);
-                                startActivity(intent);
-                                finish();
-                            }
-                        }
-                )
-                .addOnFailureListener(e -> Toast.makeText(LoginActivity.this, "User name or password is incorrect", Toast.LENGTH_SHORT).show());
-
-        new Handler(Looper.getMainLooper()).postDelayed(() -> loadingAlert.closeLoadingDialog(), 500);
 
     }
 
-    private void createLoginHistory(String email){
+    private void createLoginHistory(String email) {
         LoginHistory loginHistory = new LoginHistory();
         loginHistory.setEmail(email);
         loginHistory.setDeviceName(Build.MODEL);
-        loginHistory.setLoginTime(DataUtil.parseDateToString(new Date(),DataUtil.DATE_FORMAT_ddMMyyyyHHmmss));
+        loginHistory.setLoginTime(DataUtil.parseDateToString(new Date(), DataUtil.DATE_FORMAT_ddMMyyyyHHmmss));
 
         LoginHistoryDAO loginHistoryDAO = new LoginHistoryDAO();
         loginHistoryDAO.createLoginHistory(loginHistory);

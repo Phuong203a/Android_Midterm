@@ -20,6 +20,7 @@ public class UserAccountActivity extends AppCompatActivity {
 
     private ImageView imageViewAddUser;
     private ImageView imgBackUserAccount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,26 +29,28 @@ public class UserAccountActivity extends AppCompatActivity {
         imgBackUserAccount = findViewById(R.id.imgBackUserAccount);
         UserDAO userDAO = new UserDAO();
         List<User> allUserActive = userDAO.getAllUserActive();
+        String role = userDAO.getCurrentUser(null).getRole();
 
-        if(!allUserActive.isEmpty()){
+        if (!allUserActive.isEmpty()) {
             RecyclerView recyclerView = findViewById(R.id.recycleViewListUser);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(new MyUserAccountAdapter(getApplicationContext(),allUserActive));
+            recyclerView.setAdapter(new MyUserAccountAdapter(getApplicationContext(), allUserActive,role));
         }
-        if(!userDAO.getCurrentUser(null).getRole().equals(Const.ROLE.ADMIN)){
+        if (!role.equals(Const.ROLE.ADMIN)) {
             imageViewAddUser.setVisibility(View.GONE);
+
         }
         imageViewAddUser.setOnClickListener(v -> {
-            Intent intent = new Intent(this,AddUserActivity.class);
+            Intent intent = new Intent(this, AddUserActivity.class);
             startActivity(intent);
 
         });
-        imgBackUserAccount.setOnClickListener(t->{
-            Intent intent = new Intent(this,MainActivity.class);
+        imgBackUserAccount.setOnClickListener(t -> {
+
+            Intent intent = new Intent(this, MainActivity.class);
             startActivity(intent);
             finish();
         });
-
 
 
     }

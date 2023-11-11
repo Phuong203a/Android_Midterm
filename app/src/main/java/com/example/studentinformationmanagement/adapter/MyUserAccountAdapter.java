@@ -20,16 +20,18 @@ import java.util.List;
 public class MyUserAccountAdapter extends RecyclerView.Adapter<MyUserAccountViewHolder> {
     Context context;
     List<User> userList;
+    String currentUserRole;
 
-    public MyUserAccountAdapter(Context context, List<User> userList) {
+    public MyUserAccountAdapter(Context context, List<User> userList, String currentUserRole) {
         this.context = context;
         this.userList = userList;
+        this.currentUserRole = currentUserRole;
     }
 
     @NonNull
     @Override
     public MyUserAccountViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new MyUserAccountViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view_user,parent,false));
+        return new MyUserAccountViewHolder(LayoutInflater.from(context).inflate(R.layout.item_view_user, parent, false));
     }
 
     @Override
@@ -37,12 +39,15 @@ public class MyUserAccountAdapter extends RecyclerView.Adapter<MyUserAccountView
         String email = userList.get(position).getEmail();
         holder.txtEmail.setText(email);
         holder.txtUserName.setText(userList.get(position).getUserName());
-        DataUtil.setAvatar(userList.get(position).getAvatar(),holder.imageView,R.drawable.default_avatar);
+        DataUtil.setAvatar(userList.get(position).getAvatar(), holder.imageView, R.drawable.default_avatar);
         holder.cardView.setOnClickListener(v -> {
-                Intent intent = new Intent(context, EditUserActivity.class);
-                intent.putExtra(Const.FIELD.EMAIL,email);
+            if (!currentUserRole.equals(Const.ROLE.ADMIN)) {
+                return;
+            }
+            Intent intent = new Intent(context, EditUserActivity.class);
+            intent.putExtra(Const.FIELD.EMAIL, email);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(intent);
+            context.startActivity(intent);
         });
 
     }
