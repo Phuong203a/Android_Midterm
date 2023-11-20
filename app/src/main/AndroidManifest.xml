@@ -15,6 +15,12 @@
         android:theme="@style/Theme.StudentInformationManagement"
         tools:targetApi="31">
         <activity
+            android:name=".AddCertificateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CertificateListActivity"
+            android:exported="false" />
+        <activity
             android:name=".EditStudentActivity"
             android:exported="false" />
         <activity

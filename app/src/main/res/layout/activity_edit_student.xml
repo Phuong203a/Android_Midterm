@@ -6,6 +6,18 @@
     android:layout_height="match_parent"
     tools:context=".EditStudentActivity">
 
+    <TextView
+        android:id="@+id/txtStudentCodeEdit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="460dp"
+        android:text="Student Code:"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.581"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/imageViewCertificate"
         android:layout_width="wrap_content"
@@ -14,7 +26,7 @@
         android:layout_marginEnd="8dp"
         app:layout_constraintEnd_toStartOf="@+id/txtCertificate"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/baseline_manage_history_24" />
+        app:srcCompat="@drawable/baseline_star_24" />
 
     <TextView
         android:id="@+id/txtCertificate"
@@ -23,7 +35,7 @@
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:text="View Certificate"
-        android:textSize="14dpsp"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -35,7 +47,7 @@
         android:text="Delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.85"
+        app:layout_constraintHorizontal_bias="0.844"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ImageView
@@ -82,18 +94,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <EditText
-        android:id="@+id/editTxtStudentCodeEdit"
-        android:layout_width="214dp"
-        android:layout_height="48dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="448dp"
-        android:editable="false"
-        android:ems="10"
-        android:hint="Code"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
     <Button
         android:id="@+id/btnEditStudent"
         android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
         android:text="Edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.229"
+        app:layout_constraintHorizontal_bias="0.21"
         app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

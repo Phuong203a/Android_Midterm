@@ -38,7 +38,6 @@ public class UserAccountActivity extends AppCompatActivity {
         }
         if (!role.equals(Const.ROLE.ADMIN)) {
             imageViewAddUser.setVisibility(View.GONE);
-
         }
         imageViewAddUser.setOnClickListener(v -> {
             Intent intent = new Intent(this, AddUserActivity.class);

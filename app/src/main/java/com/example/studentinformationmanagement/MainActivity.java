@@ -111,9 +111,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
              drawerLayout.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_studentManagement) {
+             moveToStudentManager();
+             drawerLayout.closeDrawer(GravityCompat.START);
 
-
-        } else if (id == R.id.nav_dataFile) {
+         } else if (id == R.id.nav_dataFile) {
 
         } else if (id == R.id.nav_logout) {
             signOut();
@@ -135,6 +136,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
     private void moveToProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
+    }
+    private void moveToStudentManager() {
+        Intent intent = new Intent(this, StudentListActivity.class);
         startActivity(intent);
     }
 

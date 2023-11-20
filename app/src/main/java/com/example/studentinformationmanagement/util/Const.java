@@ -10,7 +10,8 @@ public class Const {
     public static class COLLECTION{
         public static String USER = "user";
         public static String LOGIN_HISTORY = "login_history";
-
+        public static String STUDENT = "student";
+        public static String CERTIFICATE = "certificate";
     }
     public static class DOCUMENT{
         public static String USER = "user";
@@ -27,6 +28,9 @@ public class Const {
         public static String IS_DELETE = "delete";
         public static String LOGIN_TIME = "loginTime";
         public static String DEVICE_NAME = "deviceName";
+        public static String NAME = "name";
+        public static String CODE = "code";
+        public static String STUDENT_CODE = "studentCode";
 
     }
     public static class REQUEST_CODE{
