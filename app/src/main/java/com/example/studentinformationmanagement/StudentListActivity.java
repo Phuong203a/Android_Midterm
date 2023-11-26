@@ -11,9 +11,11 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.studentinformationmanagement.adapter.MyUserAccountAdapter;
 import com.example.studentinformationmanagement.adapter.StudentAdapter;
+import com.example.studentinformationmanagement.dao.DataExportImportDAO;
 import com.example.studentinformationmanagement.dao.StudentDAO;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.Student;
@@ -22,7 +24,7 @@ import com.example.studentinformationmanagement.util.Const;
 import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
-    private ImageView imageViewAddStudent;
+    private ImageView imageViewAddStudent,imageExport;
     private ImageView imgBack;
     private Spinner spinner;
     @Override
@@ -31,7 +33,7 @@ public class StudentListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_student_list);
         imageViewAddStudent = findViewById(R.id.imgAddStudent);
         imgBack = findViewById(R.id.imgBackStudentList);
-
+        imageExport= findViewById(R.id.imgExportStudent);
         spinner=findViewById(R.id.spinnerOrderStudent);
         String[] arraySpinner = new String[]{
                 Const.FIELD.NAME,Const.FIELD.CODE
@@ -66,6 +68,14 @@ public class StudentListActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+        imageExport.setOnClickListener(v-> exportStudent(studentList));
 
+    }
+
+    private void exportStudent(List<Student> studentList) {
+        DataExportImportDAO dao =new DataExportImportDAO();
+        String fileName = "students.csv";
+        boolean isExportSuccess= dao.exportCSVStudent(studentList,fileName);
+        Toast.makeText(this, "Export file " +(isExportSuccess ? "ok":"thất bại"), Toast.LENGTH_SHORT).show();
     }
 }

@@ -24,12 +24,12 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="22dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintEnd_toStartOf="@+id/txtCertificate"
+        app:layout_constraintEnd_toStartOf="@+id/textCertificate"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/baseline_star_24" />
 
     <TextView
-        android:id="@+id/txtCertificate"
+        android:id="@+id/textCertificate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"

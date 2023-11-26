@@ -11,10 +11,12 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.example.studentinformationmanagement.adapter.CertificateAdapter;
 import com.example.studentinformationmanagement.adapter.StudentAdapter;
 import com.example.studentinformationmanagement.dao.CertificateDAO;
+import com.example.studentinformationmanagement.dao.DataExportImportDAO;
 import com.example.studentinformationmanagement.dao.UserDAO;
 import com.example.studentinformationmanagement.model.Certificate;
 import com.example.studentinformationmanagement.util.Const;
@@ -22,7 +24,7 @@ import com.example.studentinformationmanagement.util.Const;
 import java.util.List;
 
 public class CertificateListActivity extends AppCompatActivity {
-    private ImageView imageViewAddCertificate;
+    private ImageView imageViewAddCertificate, imageViewExport;
     private ImageView imgBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,7 @@ public class CertificateListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_certificate_list);
         imageViewAddCertificate = findViewById(R.id.imgAddCertificate);
         imgBack = findViewById(R.id.imgBackCertificateList);
-
+        imageViewExport = findViewById(R.id.imageExportCertificate);
         Bundle extras = getIntent().getExtras();
         String studentCode = extras.getString(Const.FIELD.STUDENT_CODE);
 
@@ -50,8 +52,16 @@ public class CertificateListActivity extends AppCompatActivity {
 
         imageViewAddCertificate.setOnClickListener(v -> addNewCertificate( certificateDAO,studentCode));
         imgBack.setOnClickListener(v->finish());
-
+        imageViewExport.setOnClickListener(v -> exportCertificate(certificates,studentCode));
     }
+
+    private void exportCertificate(List<Certificate> certificates,String studentCode) {
+        DataExportImportDAO dao =new DataExportImportDAO();
+        String fileName = studentCode+"_certificate.csv";
+        boolean isExportSuccess= dao.exportCSVCertificate(certificates,fileName);
+        Toast.makeText(this, "Export file " +(isExportSuccess ? "ok":"thất bại"), Toast.LENGTH_SHORT).show();
+    }
+
     private void addNewCertificate(CertificateDAO certificateDAO, String studentCode){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Add new certificate");
