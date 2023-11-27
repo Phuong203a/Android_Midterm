@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.studentinformationmanagement"
-        minSdk = 32
+        minSdk = 30
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
@@ -42,4 +42,6 @@ dependencies {
     implementation ("de.hdodenhof:circleimageview:3.1.0")
     implementation ("com.squareup.picasso:picasso:2.71828")
     implementation("com.google.firebase:firebase-storage")
+    implementation ("org.apache.commons:commons-csv:1.9.0")
+
 }

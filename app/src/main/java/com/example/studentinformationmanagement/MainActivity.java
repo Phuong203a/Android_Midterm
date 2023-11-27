@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         try {
             mAuth = FirebaseAuth.getInstance();
             currentUser = mAuth.getCurrentUser();
-            if (currentUser == null ||userDAO.getCurrentUser(null).getStatus().equals(Const.STATUS.LOCKED)) {
+            if (currentUser == null || userDAO.getCurrentUser(null).getStatus().equals(Const.STATUS.LOCKED)) {
 
                 Intent intent = new Intent(this, LoginActivity.class);
                 startActivity(intent);
@@ -102,20 +102,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         int id = item.getItemId();
-         if (id == R.id.nav_profile) {
+        if (id == R.id.nav_profile) {
             moveToProfile();
             drawerLayout.closeDrawer(GravityCompat.START);
-        }
-        else if (id == R.id.nav_accountManagement) {
-             moveToAccountManager();
-             drawerLayout.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.nav_accountManagement) {
+            moveToAccountManager();
+            drawerLayout.closeDrawer(GravityCompat.START);
 
         } else if (id == R.id.nav_studentManagement) {
-             moveToStudentManager();
-             drawerLayout.closeDrawer(GravityCompat.START);
+            moveToStudentManager();
+            drawerLayout.closeDrawer(GravityCompat.START);
 
-         } else if (id == R.id.nav_dataFile) {
-
+        } else if (id == R.id.nav_dataFile) {
+            moveToImport();
+            drawerLayout.closeDrawer(GravityCompat.START);
         } else if (id == R.id.nav_logout) {
             signOut();
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -130,16 +130,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
         finish();
     }
+
     private void moveToAccountManager() {
         Intent intent = new Intent(this, UserAccountActivity.class);
         startActivity(intent);
     }
+
     private void moveToProfile() {
         Intent intent = new Intent(this, ProfileActivity.class);
         startActivity(intent);
     }
+
     private void moveToStudentManager() {
         Intent intent = new Intent(this, StudentListActivity.class);
+        startActivity(intent);
+    }
+    private void moveToImport() {
+        Intent intent = new Intent(this, ImportFileActivity.class);
         startActivity(intent);
     }
 
@@ -153,24 +160,30 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     private void settingNavHeader() {
-        View headerView = navigationView.getHeaderView(0);
-        if (mAuth == null) {
-            mAuth = FirebaseAuth.getInstance();
+        try {
+
+
+            View headerView = navigationView.getHeaderView(0);
+            if (mAuth == null) {
+                mAuth = FirebaseAuth.getInstance();
+            }
+
+            String email = mAuth.getCurrentUser().getEmail();
+            DocumentReference docRef = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.USER).document(email);
+            docRef.get().addOnCompleteListener(task1 -> {
+                DocumentSnapshot document = task1.getResult();
+
+                TextView navUsername = headerView.findViewById(R.id.txtUsernameHeader);
+                TextView navEmail = headerView.findViewById(R.id.txtEmailHear);
+                navUsername.setText(document.getString(Const.FIELD.USER_NAME));
+                navEmail.setText(document.getString(Const.FIELD.EMAIL));
+                DataUtil.setAvatar(document.getString(Const.FIELD.AVATAR),
+                        headerView.findViewById(R.id.imageViewHeader), R.drawable.default_avatar);
+
+            });
+        } catch (Exception ex) {
+            Log.d("Exception settingNavHeader MainActivity", ex.getMessage());
         }
-
-        String email = mAuth.getCurrentUser().getEmail();
-        DocumentReference docRef = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.USER).document(email);
-        docRef.get().addOnCompleteListener(task1 -> {
-            DocumentSnapshot document = task1.getResult();
-
-            TextView navUsername = headerView.findViewById(R.id.txtUsernameHeader);
-            TextView navEmail = headerView.findViewById(R.id.txtEmailHear);
-            navUsername.setText(document.getString(Const.FIELD.USER_NAME));
-            navEmail.setText(document.getString(Const.FIELD.EMAIL));
-            DataUtil.setAvatar(document.getString(Const.FIELD.AVATAR),
-                    headerView.findViewById(R.id.imageViewHeader),R.drawable.default_avatar);
-
-        });
 
     }
 }

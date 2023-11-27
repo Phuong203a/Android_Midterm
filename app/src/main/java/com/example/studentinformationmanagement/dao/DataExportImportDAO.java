@@ -15,7 +15,7 @@ import java.util.List;
 public class DataExportImportDAO {
     public boolean exportCSVCertificate(List<Certificate> certificates, String fileName) {
         File externalDownloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(externalDownloadsDir, fileName);
+        File file = new File(externalDownloadsDir, "STUDENT_"+fileName);
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -41,7 +41,7 @@ public class DataExportImportDAO {
 
     public boolean exportCSVStudent(List<Student> studentList, String fileName) {
         File externalDownloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(externalDownloadsDir, fileName);
+        File file = new File(externalDownloadsDir, "CERTIFICATE_"+fileName);
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
