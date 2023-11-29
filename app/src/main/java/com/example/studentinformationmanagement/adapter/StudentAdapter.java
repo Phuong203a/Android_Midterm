@@ -68,10 +68,8 @@ public class StudentAdapter extends  RecyclerView.Adapter<StudentViewHolder>{
         holder.txtStudentName.setText(studentList.get(position).getName());
         holder.txtStudentCode.setText(studentList.get(position).getCode());
         holder.cardView.setOnClickListener(v -> {
-            if (currentUserRole.equals(Const.ROLE.EMPLOYEE)) {
-                return;
-            }
             Intent intent = new Intent(context, EditStudentActivity.class);
+            intent.putExtra(Const.FIELD.ROLE, currentUserRole);
             intent.putExtra(Const.FIELD.CODE, studentList.get(position).getCode());
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             context.startActivity(intent);

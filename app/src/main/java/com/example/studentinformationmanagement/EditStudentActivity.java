@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -33,6 +34,7 @@ public class EditStudentActivity extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
         String code = extras.getString(Const.FIELD.CODE);
+        String currentRole = extras.getString(Const.FIELD.ROLE);
 
         StudentDAO studentDAO = new StudentDAO();
         Student student = studentDAO.getStudentByCode(code);
@@ -42,6 +44,11 @@ public class EditStudentActivity extends AppCompatActivity {
 
         imgBack.setOnClickListener(v -> backToListStudent());
         imgViewCertificate.setOnClickListener(v -> viewCertificate(code));
+
+        if(currentRole.equals(Const.ROLE.EMPLOYEE)){
+            btnEdit.setVisibility(View.GONE);
+            btnDelete.setVisibility(View.GONE);
+        }
         btnEdit.setOnClickListener(v -> updateStudent(student, studentDAO));
         btnDelete.setOnClickListener(v -> deleteStudent(student, studentDAO));
 

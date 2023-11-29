@@ -146,8 +146,10 @@ public class EditProfileActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == Const.REQUEST_CODE.IMAGE) {
-            imageUri = data.getData();
-            imageViewAvatar.setImageURI(imageUri);
+            if(data!= null){
+                imageUri = data.getData();
+                imageViewAvatar.setImageURI(imageUri);
+            }
         }
     }
 
