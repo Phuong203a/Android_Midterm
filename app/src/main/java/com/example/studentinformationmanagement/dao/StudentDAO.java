@@ -60,13 +60,25 @@ public class StudentDAO {
         }
         return null;
     }
+
     public List<Student> getAllStudent(String orderByField) {
         List<Student> allStudent = new ArrayList<>();
         try {
-            Task<QuerySnapshot> firebaseTask = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.STUDENT)
-                    .whereEqualTo(Const.FIELD.IS_DELETE, false)
-                    .get()
-                    .addOnCompleteListener(task -> {});
+            Task<QuerySnapshot> firebaseTask = (orderByField == null || ("").equals(orderByField)) ?
+                    Const.DATABASE_REFERENCE
+                            .collection(Const.COLLECTION.STUDENT)
+                            .whereEqualTo(Const.FIELD.IS_DELETE, false)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                            })
+                    :
+                    Const.DATABASE_REFERENCE
+                            .collection(Const.COLLECTION.STUDENT)
+                            .whereEqualTo(Const.FIELD.IS_DELETE, false)
+                            .orderBy(orderByField, Query.Direction.ASCENDING)
+                            .get()
+                            .addOnCompleteListener(task -> {
+                            });
 
             FutureTask<Object> futureTask = new FutureTask<>(() -> {
                 try {
@@ -95,12 +107,13 @@ public class StudentDAO {
         }
         return allStudent;
     }
+
     public void updateStudent(Student student) {
         DocumentReference docRef = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.STUDENT).document(student.getCode());
         docRef.update(Const.FIELD.NAME, student.getName(),
                         Const.FIELD.CODE, student.getCode(),
                         Const.FIELD.IS_DELETE, student.isDelete()
-                        ).addOnSuccessListener(aVoid -> {
+                ).addOnSuccessListener(aVoid -> {
                     Log.d("updateStudent", "DocumentSnapshot successfully updated!");
 
                 })

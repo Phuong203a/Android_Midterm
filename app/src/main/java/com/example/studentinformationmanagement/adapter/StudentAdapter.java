@@ -29,6 +29,33 @@ public class StudentAdapter extends  RecyclerView.Adapter<StudentViewHolder>{
         this.studentList = studentList;
         this.currentUserRole = currentUserRole;
     }
+    public StudentAdapter(){
+
+    }
+
+    public Context getContext() {
+        return context;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public List<Student> getStudentList() {
+        return studentList;
+    }
+
+    public void setStudentList(List<Student> studentList) {
+        this.studentList = studentList;
+    }
+
+    public String getCurrentUserRole() {
+        return currentUserRole;
+    }
+
+    public void setCurrentUserRole(String currentUserRole) {
+        this.currentUserRole = currentUserRole;
+    }
 
     @NonNull
     @Override

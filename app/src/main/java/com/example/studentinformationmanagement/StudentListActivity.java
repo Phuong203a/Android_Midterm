@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -24,22 +25,25 @@ import com.example.studentinformationmanagement.util.Const;
 import java.util.List;
 
 public class StudentListActivity extends AppCompatActivity {
-    private ImageView imageViewAddStudent,imageExport;
+    private ImageView imageViewAddStudent, imageExport;
     private ImageView imgBack;
     private Spinner spinner;
+    private List<Student> studentList;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_student_list);
         imageViewAddStudent = findViewById(R.id.imgAddStudent);
         imgBack = findViewById(R.id.imgBackStudentList);
-        imageExport= findViewById(R.id.imgExportStudent);
-        spinner=findViewById(R.id.spinnerOrderStudent);
+        imageExport = findViewById(R.id.imgExportStudent);
+        spinner = findViewById(R.id.spinnerOrderStudent);
+        RecyclerView recyclerView = findViewById(R.id.recycleViewListStudent);
         String[] arraySpinner = new String[]{
-                Const.FIELD.NAME,Const.FIELD.CODE
+                Const.FIELD.NAME, Const.FIELD.CODE
         };
 
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,
+        ArrayAdapter<String> adapter = new ArrayAdapter(this,
                 android.R.layout.simple_spinner_item, arraySpinner);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
@@ -47,14 +51,16 @@ public class StudentListActivity extends AppCompatActivity {
         UserDAO userDAO = new UserDAO();
         StudentDAO studentDAO = new StudentDAO();
         String role = userDAO.getCurrentUser(null).getRole();
-        List<Student> studentList = studentDAO.getAllStudent(null);
+        studentList = studentDAO.getAllStudent(null);
 
-        if (!studentList.isEmpty()) {
-            RecyclerView recyclerView = findViewById(R.id.recycleViewListStudent);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-            recyclerView.setAdapter(new StudentAdapter(getApplicationContext(), studentList,role));
-        }
-        if(role.equals(Const.ROLE.EMPLOYEE)){
+        StudentAdapter studentAdapter = new StudentAdapter();
+        studentAdapter.setContext(getApplicationContext());
+        studentAdapter.setCurrentUserRole(role);
+        studentAdapter.setStudentList(studentList);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(studentAdapter);
+
+        if (role.equals(Const.ROLE.EMPLOYEE)) {
             imageViewAddStudent.setVisibility(View.GONE);
         }
 
@@ -68,14 +74,27 @@ public class StudentListActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
-        imageExport.setOnClickListener(v-> exportStudent(studentList));
+        imageExport.setOnClickListener(v -> exportStudent(studentList));
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                studentList.clear();
+                studentList = studentDAO.getAllStudent(arraySpinner[position]);
+                studentAdapter.setStudentList(studentList);
+                studentAdapter.notifyDataSetChanged();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
     }
 
     private void exportStudent(List<Student> studentList) {
-        DataExportImportDAO dao =new DataExportImportDAO();
+        DataExportImportDAO dao = new DataExportImportDAO();
         String fileName = "students.csv";
-        boolean isExportSuccess= dao.exportCSVStudent(studentList,fileName);
-        Toast.makeText(this, "Export file " +(isExportSuccess ? "ok":"thất bại"), Toast.LENGTH_SHORT).show();
+        boolean isExportSuccess = dao.exportCSVStudent(studentList, fileName);
+        Toast.makeText(this, "Export file " + (isExportSuccess ? "ok" : "thất bại"), Toast.LENGTH_SHORT).show();
     }
 }

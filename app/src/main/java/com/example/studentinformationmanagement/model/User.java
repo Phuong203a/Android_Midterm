@@ -48,7 +48,7 @@ public class User {
     }
 
     public String getAvatar() {
-        if (avatar.equals("") || avatar == null) return "";
+        if (avatar == null || ("").equals(avatar)) return "";
         return avatar;
     }
 

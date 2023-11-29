@@ -8,6 +8,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -31,6 +32,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private NavigationView navigationView;
     private ActionBarDrawerToggle drawerToggle;
     private FirebaseUser currentUser;
+    private String userRole;
 
     @Override
     protected void onStart() {
@@ -146,6 +148,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         startActivity(intent);
     }
     private void moveToImport() {
+        if(userRole.equals(Const.ROLE.EMPLOYEE)){
+            Toast.makeText(this, "User không có quyền sử dụng", Toast.LENGTH_SHORT).show();
+            return;
+        }
         Intent intent = new Intent(this, ImportFileActivity.class);
         startActivity(intent);
     }
@@ -172,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             DocumentReference docRef = Const.DATABASE_REFERENCE.collection(Const.COLLECTION.USER).document(email);
             docRef.get().addOnCompleteListener(task1 -> {
                 DocumentSnapshot document = task1.getResult();
-
+                userRole = document.getString(Const.FIELD.ROLE);
                 TextView navUsername = headerView.findViewById(R.id.txtUsernameHeader);
                 TextView navEmail = headerView.findViewById(R.id.txtEmailHear);
                 navUsername.setText(document.getString(Const.FIELD.USER_NAME));
