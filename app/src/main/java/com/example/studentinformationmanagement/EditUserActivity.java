@@ -102,7 +102,7 @@ public class EditUserActivity extends AppCompatActivity {
         }
 
         imgBack.setOnClickListener(v -> backToListUser());
-        btnEdit.setOnClickListener(v -> editUser(userDAO));
+        btnEdit.setOnClickListener(v -> editUser(editUser,userDAO));
         imageViewAvatar.setOnClickListener(v -> selectImage());
         btnDelete.setOnClickListener(v -> deleteUser(editUser, userDAO));
         txtLoginHistory.setOnClickListener(v ->viewLoginHistory(email));
@@ -115,17 +115,16 @@ public class EditUserActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    private void editUser(UserDAO userDAO) {
+    private void editUser(User user,UserDAO userDAO) {
 
-        User newUser = new User();
-        newUser.setEmail(editTextEmail.getText().toString());
-        newUser.setUserName(editTextName.getText().toString());
-        newUser.setDob(editTextDob.getText().toString());
-        newUser.setPhoneNumber(editTextPhone.getText().toString());
-        newUser.setRole(spinner.getSelectedItem().toString());
+        user.setEmail(editTextEmail.getText().toString());
+        user.setUserName(editTextName.getText().toString());
+        user.setDob(editTextDob.getText().toString());
+        user.setPhoneNumber(editTextPhone.getText().toString());
+        user.setRole(spinner.getSelectedItem().toString());
         if (imageUri != null) {
             ImageDao imageDao = new ImageDao();
-            newUser.setAvatar(imageDao.uploadImage(imageUri));
+            user.setAvatar(imageDao.uploadImage(imageUri));
         }
         String status = Const.STATUS.NORMAL;
         int radioId = radioGroup.getCheckedRadioButtonId();
@@ -134,9 +133,9 @@ public class EditUserActivity extends AppCompatActivity {
         } else if (radioId == R.id.radioButtonLockedEditUser) {
             status = Const.STATUS.LOCKED;
         }
-        newUser.setStatus(status);
+        user.setStatus(status);
 
-        userDAO.updateUser(newUser);
+        userDAO.updateUser(user);
         Toast.makeText(this, "Update account thành công", Toast.LENGTH_SHORT).show();
         backToListUser();
     }
@@ -158,7 +157,7 @@ public class EditUserActivity extends AppCompatActivity {
     private void deleteUser(User user, UserDAO userDAO) {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if (user.getEmail().equals(currentUser)) {
+        if (user.getEmail().equals(currentUser.getEmail())) {
             Toast.makeText(this, "Không thể tự xoá account chính chủ", Toast.LENGTH_SHORT).show();
             return;
         }

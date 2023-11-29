@@ -2,6 +2,7 @@ package com.example.studentinformationmanagement.dao;
 
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.example.studentinformationmanagement.model.Certificate;
 import com.example.studentinformationmanagement.model.Student;
@@ -10,12 +11,13 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
+import java.util.Date;
 import java.util.List;
 
 public class DataExportImportDAO {
     public boolean exportCSVCertificate(List<Certificate> certificates, String fileName) {
         File externalDownloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(externalDownloadsDir, "STUDENT_"+fileName);
+        File file = new File(externalDownloadsDir, "CERTIFICATE_"+new Date() +fileName);
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -30,6 +32,8 @@ public class DataExportImportDAO {
             }
 
             writer.close();
+            osw.close();
+            fos.close();
 
             Log.d("CSVExporter", "CSV file exported to: " + file.getAbsolutePath());
             return true;
@@ -41,7 +45,7 @@ public class DataExportImportDAO {
 
     public boolean exportCSVStudent(List<Student> studentList, String fileName) {
         File externalDownloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        File file = new File(externalDownloadsDir, "CERTIFICATE_"+fileName);
+        File file = new File(externalDownloadsDir, "STUDENT_"+new Date()+fileName);
 
         try {
             FileOutputStream fos = new FileOutputStream(file);
@@ -56,6 +60,8 @@ public class DataExportImportDAO {
             }
 
             writer.close();
+            osw.close();
+            fos.close();
 
             Log.d("CSVExporter", "CSV file exported to: " + file.getAbsolutePath());
             return true;

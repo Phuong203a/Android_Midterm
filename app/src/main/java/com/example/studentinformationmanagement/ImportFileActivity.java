@@ -65,7 +65,7 @@ public class ImportFileActivity extends AppCompatActivity {
                 Uri uri = data.getData();
                 if (requestCode == READ_REQUEST_CODE_STUDENT) {
                     importStudent(uri);
-                } else if (requestCode == READ_REQUEST_CODE_STUDENT) {
+                } else if (requestCode == READ_REQUEST_CODE_CERTIFICATE) {
                     importCertificate(uri);
                 }
             }
